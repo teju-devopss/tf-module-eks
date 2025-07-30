@@ -69,13 +69,14 @@ resource "aws_eks_node_group" "node" {
   node_group_name = "${local.name}-${each.key}-ng"
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.subnets_ids
+  instance_types = each.value["instance_types"]
+  capacity_type  = each.value["capacity_type"]
 
   scaling_config {
     desired_size = lookup(each.value,"size",null)
     max_size     = each.value["size"]+5
     min_size     = lookup(each.value,"size",null)
-    instance_types = each.value["instance_types"]
-    capacity_type  = each.value["capacity_type"]
+
   }
 
 }
