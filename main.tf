@@ -40,17 +40,17 @@ resource "aws_iam_role" "node" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "node-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "main-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.node.name
 }
 
-resource "aws_iam_role_policy_attachment" "node-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "main-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.node.name
 }
 
-resource "aws_iam_role_policy_attachment" "node-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "main-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.node.name
 }
@@ -74,8 +74,8 @@ resource "aws_eks_node_group" "node" {
     desired_size = lookup(each.value,"size",null)
     max_size     = each.value["size"]+5
     min_size     = lookup(each.value,"size",null)
-    instance_types = lookup(each.value,"instance_types",null)
-    capacity_type  = lookup(each.value,"capacity_type",null)
+    instance_types = each.value["instance_types"]
+    capacity_type  = each.value["capacity_type"]
   }
 
 }
