@@ -84,15 +84,19 @@ resource "aws_eks_node_group" "node" {
   capacity_type  = each.value["capacity_type"]
 
   launch_template {
-    version = "$latest"
-    id      =lookup(lookup(aws_launch_template.main,each.key,null), id , null)
+    version = "$Latest"
+    id      = lookup(lookup(aws_launch_template.main, each.key, null), "id", null)
   }
+
 
   scaling_config {
     desired_size = lookup(each.value,"size",null)
     max_size     = each.value["size"]+5
     min_size     = lookup(each.value,"size",null)
 
+    tags = {
+      Name = "${local.name}-${each.key}-ng"
+    }
   }
 
 }
