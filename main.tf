@@ -90,14 +90,14 @@ resource "aws_eks_node_group" "node" {
 
 
   scaling_config {
-    desired_size = lookup(each.value,"size",null)
-    max_size     = each.value["size"]+5
-    min_size     = lookup(each.value,"size",null)
-
+    desired_size = lookup(each.value, "size", null)
+    max_size = each.value["size"]+5
+    min_size = lookup(each.value, "size", null)
+  }
     tags = {
       Name = "${local.name}-${each.key}-ng"
     }
   }
 
-}
+
 
