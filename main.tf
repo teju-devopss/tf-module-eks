@@ -45,17 +45,22 @@ resource "aws_iam_policy" "extra-node-policy" {
   description = "${local.name}-node-role-extra-policy"
 
   policy = jsonencode({
-    "Sid": "VisualEditor0",
-    "Effect": "Allow",
-    "Action": [
-      "ssm:DescribeParameters",
-      "ssm:GetParameterHistory",
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter"
-    ],
-    "Resource": "*"
-  })
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "VisualEditor0",
+        "Effect": "Allow",
+        "Action": [
+          "ssm:DescribeParameters",
+          "ssm:GetParameterHistory",
+          "ssm:GetParametersByPath",
+          "ssm:GetParameters",
+          "ssm:GetParameter"
+        ],
+        "Resource": "*"
+      }
+    ]
+    })
 }
 
 resource "aws_iam_role_policy_attachment" "main-AmazonEKSWorkerNodePolicy" {
