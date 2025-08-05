@@ -51,11 +51,11 @@ resource "aws_iam_policy" "node-extra-policy" {
         "Sid": "VisualEditor0",
         "Effect": "Allow",
         "Action": [
-          "ssm:DescribeParameters",
-          "ssm:GetParameterHistory",
-          "ssm:GetParametersByPath",
-          "ssm:GetParameters",
           "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParameterHistory",
+          "s3:GetObject",
+          "s3:PutObject",
           "kms:Decrypt",
           "route53:*"
         ],
