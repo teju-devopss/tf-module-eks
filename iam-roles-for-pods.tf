@@ -49,18 +49,18 @@ resource "aws_iam_role" "app-ssm" {
   name = "${local.name}-pod-role-for-${var.components[count.index]}-ssm"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": "sts:AssumeRoleWithWebIdentity",
-        "Principal": {
-          "Federated": "arn:aws:iam::522814736516:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}"
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Principal" : {
+          "Federated" : "arn:aws:iam::522814736516:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}"
         },
-        "Condition": {
-          "StringEquals": {
-            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com",
-            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:sub": "system:serviceaccount:default:${var.components[count.index]}"
+        "Condition" : {
+          "StringEquals" : {
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud" : "sts.amazonaws.com",
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:sub" : "system:serviceaccount:default:${var.components[count.index]}"
           }
         }
       }
