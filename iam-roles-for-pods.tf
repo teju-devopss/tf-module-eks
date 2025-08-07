@@ -12,7 +12,7 @@ resource "aws_iam_role" "external-dns" {
         },
         "Condition": {
           "StringEquals": {
-            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com"
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com",
             "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:sub": "system:serviceaccount:default:external-dns"
           }
         }
@@ -59,7 +59,7 @@ resource "aws_iam_role" "app-ssm" {
         },
         "Condition": {
           "StringEquals": {
-            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com"
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com",
             "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:sub": "system:serviceaccount:default:${var.components[count.index]}"
           }
         }
