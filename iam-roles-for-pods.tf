@@ -40,6 +40,56 @@ resource "aws_iam_role" "external-dns" {
 
 }
 
+resource "aws_iam_role" "cluster-autoscaler" {
+  name = "${local.name}-pod-role-for-cluster-autoscaler"
+
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Principal": {
+          "Federated": "arn:aws:iam::522814736516:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}"
+        },
+        "Condition": {
+          "StringEquals": {
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:aud": "sts.amazonaws.com"
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.cluster_issuer_id}:sub": "system:serviceaccount:default:node-autoscaler-aws-cluster-autoscaler"
+          }
+        }
+      }
+    ]
+  })
+
+  inline_policy {
+    name = "parameter-store"
+
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "ClusterAutoScaler",
+          "Effect" : "Allow",
+          "Action" : [
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:DescribeAutoScalingInstances",
+            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:DescribeScalingActivities",
+            "autoscaling:SetDesiredCapacity",
+            "autoscaling:TerminateInstanceInAutoScalingGroup",
+            "eks:DescribeNodegroup",
+            "ec2:DescribeLaunchTemplateVersions"
+          ],
+          "Resource" : "*"
+        }
+      ]
+    })
+  }
+
+}
+
+
 variable "components" {
   default = ["frontend", "cart", "catalogue", "user", "shipping", "payment"]
 }
